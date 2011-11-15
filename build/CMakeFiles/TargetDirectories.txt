@@ -1,3 +1,0 @@
-/home/zylia/workspace/Para/ffcpp2/build/lib/parallel/CMakeFiles/parallel.dir
-/home/zylia/workspace/Para/ffcpp2/build/tools/CMakeFiles/test.dir
-/home/zylia/workspace/Para/ffcpp2/build/lib/threadpool/CMakeFiles/threadpool.dir
