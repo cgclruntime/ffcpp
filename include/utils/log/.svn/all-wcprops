@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/DISC/!svn/ver/404/ffcpp2/include/utils/log
+END
+log4cplus.h
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/DISC/!svn/ver/400/ffcpp2/include/utils/log/log4cplus.h
+END
+logger.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/DISC/!svn/ver/402/ffcpp2/include/utils/log/logger.h
+END
+log_module.h
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/DISC/!svn/ver/404/ffcpp2/include/utils/log/log_module.h
+END

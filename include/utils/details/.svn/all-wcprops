@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/DISC/!svn/ver/377/ffcpp2/include/utils/details
+END
+windows_utils.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/DISC/!svn/ver/377/ffcpp2/include/utils/details/windows_utils.h
+END
+windows_semaphore.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/DISC/!svn/ver/377/ffcpp2/include/utils/details/windows_semaphore.h
+END
+linux_utils.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/DISC/!svn/ver/377/ffcpp2/include/utils/details/linux_utils.h
+END
+linux_semaphore.h
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/DISC/!svn/ver/377/ffcpp2/include/utils/details/linux_semaphore.h
+END

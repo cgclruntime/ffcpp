@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/DISC/!svn/ver/399/ffcpp2/include/utils/inl
+END
+msg_switch_inl.h
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/DISC/!svn/ver/377/ffcpp2/include/utils/inl/msg_switch_inl.h
+END
+msg_port_inl.h
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/DISC/!svn/ver/399/ffcpp2/include/utils/inl/msg_port_inl.h
+END
+semaphore_pool_inl.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/DISC/!svn/ver/377/ffcpp2/include/utils/inl/semaphore_pool_inl.h
+END
+msg_port_internal_inl.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/DISC/!svn/ver/377/ffcpp2/include/utils/inl/msg_port_internal_inl.h
+END

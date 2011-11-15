@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/test.dir/test2.cpp.o  -o test -rdynamic -L/home/zylia/boost/boost_1_46_1/usr/local/lib -L/home/zylia/workspace/Para/ffcpp2/build/lib -lparallel -lthreadpool -Wl,-rpath,/home/zylia/boost/boost_1_46_1/usr/local/lib:/home/zylia/workspace/Para/ffcpp2/build/lib 

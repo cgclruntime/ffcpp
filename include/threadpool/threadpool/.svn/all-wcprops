@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool
+END
+Jamrules
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/Jamrules
+END
+task_adaptors.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/task_adaptors.hpp
+END
+CHANGE_LOG
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/CHANGE_LOG
+END
+size_policies.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/size_policies.hpp
+END
+shutdown_policies.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/shutdown_policies.hpp
+END
+pool_adaptors.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/pool_adaptors.hpp
+END
+project-root.jam
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/project-root.jam
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/README
+END
+Jamfile.v2
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/Jamfile.v2
+END
+pool.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/pool.hpp
+END
+LICENSE_1_0.txt
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/LICENSE_1_0.txt
+END
+future.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/future.hpp
+END
+scheduling_policies.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/scheduling_policies.hpp
+END
+TODO
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/TODO
+END
+COPYING
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/COPYING
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/DISC/!svn/ver/377/ffcpp2/include/threadpool/threadpool/Makefile
+END

@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/DISC/!svn/ver/404/ffcpp2/include/utils
+END
+msg_port.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/DISC/!svn/ver/397/ffcpp2/include/utils/msg_port.h
+END
+atomic.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/DISC/!svn/ver/377/ffcpp2/include/utils/atomic.h
+END
+semaphore_pool.h
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/DISC/!svn/ver/377/ffcpp2/include/utils/semaphore_pool.h
+END
+allocator.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/DISC/!svn/ver/377/ffcpp2/include/utils/allocator.h
+END
+os_utils.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/DISC/!svn/ver/377/ffcpp2/include/utils/os_utils.h
+END
+log.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/DISC/!svn/ver/400/ffcpp2/include/utils/log.h
+END
+singleton.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/DISC/!svn/ver/377/ffcpp2/include/utils/singleton.h
+END
+semaphore.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/DISC/!svn/ver/377/ffcpp2/include/utils/semaphore.h
+END
+types.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/DISC/!svn/ver/400/ffcpp2/include/utils/types.h
+END
+msg_port_internal.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/DISC/!svn/ver/377/ffcpp2/include/utils/msg_port_internal.h
+END
+atomic_stamped_reference.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/DISC/!svn/ver/399/ffcpp2/include/utils/atomic_stamped_reference.h
+END
+msg_switch.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/DISC/!svn/ver/397/ffcpp2/include/utils/msg_switch.h
+END

@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/DISC/!svn/ver/407/ffcpp2/lib/parallel
+END
+wait_tree.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/DISC/!svn/ver/407/ffcpp2/lib/parallel/wait_tree.cpp
+END
+parallel_base.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/DISC/!svn/ver/406/ffcpp2/lib/parallel/parallel_base.cpp
+END
+wait_node.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/DISC/!svn/ver/402/ffcpp2/lib/parallel/wait_node.cpp
+END
+wait_conds.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/DISC/!svn/ver/402/ffcpp2/lib/parallel/wait_conds.cpp
+END
