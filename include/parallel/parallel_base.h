@@ -77,7 +77,7 @@ protected:
 		state_wait_semaphore = 0x3,
 	};
 
-	struct State{
+	union State{
 		utl::uint8_t 	state;	// no use.
 		struct {
 			utl::uint8_t s1 : 4; //can be state_running, state_exe_over
@@ -85,11 +85,14 @@ protected:
 			utl::uint8_t s3 : 2; //can be state_constructed, state_deconstructing and state_called_paren_operator
 		}D;
 	};
+
+	static volatile utl::uint32_t s_iIdentifier; //To generate the identifier;
+
 	///< The identifier of the parallel function
 	pfid_t 		m_iIdentifier;
 	State		m_iState;	///< The state of the parallel function.
 
-	static volatile utl::uint32_t s_iIdentifier; //To generate the identifier;
+
 };//end class ParallelBase;
 
 

@@ -19,9 +19,9 @@ public:
 	EagerScheduler(FFFunctionThreadPool *pPool);
 	~EagerScheduler();
 
-	inline void			setDeadLock(){ m_iState = state_dead_lock; m_oUnrunnedPFs.clear();};
+	inline void			setDeadLock(){ m_iState = state_dead_lock;/* m_oUnrunnedPFs.clear();*/};
 	inline void			setScheduled(){ m_iState = state_scheduled;};
-	inline void			setStateNull(){ m_iState = state_null; m_oUnrunnedPFs.clear();};
+	inline void			setStateNull(){ m_iState = state_null; /*m_oUnrunnedPFs.clear();*/};
 
 	inline utl::uint8_t	getState() const {return m_iState;};
 
@@ -49,7 +49,7 @@ protected:
 	typedef std::vector<ParallelBase *> PFContainer_t;
 
 	FFFunctionThreadPool *	m_pPool;
-	utl::uint8_t			m_iState;
+	volatile utl::uint8_t			m_iState;
 	PFContainer_t 			m_oUnrunnedPFs;
 	PFContainer_t			m_oReadyPFs;
 	utl::MsgPort<FFMsg>		m_oPort;

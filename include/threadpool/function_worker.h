@@ -34,6 +34,7 @@ public:
 	inline void terminate(){m_bIsTerminated = true;}
 
 protected:
+	friend class ParallelBase;
 	//! Steal a task from other workers.
 	/// This may return NULL.
 	ParallelBase * 		stealTask();

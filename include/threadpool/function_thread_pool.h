@@ -50,12 +50,18 @@ public:
 	}
 protected:
 	friend class FFFunctionWorker;
+	friend class ParallelBase;
 
 	//! Get a worker which has the most minimal size();
 	FFFunctionWorker * getMostRelexedWorker();
 
 	//! Get a worker which has the most max size();
 	FFFunctionWorker * getMostBusyWorker();
+
+	//! Get the N th worker.
+	/// index can be larger than the size,
+	/// as the return is index%size actually.
+	FFFunctionWorker * getNthWorker(int index);
 
 protected:
 	FFFunctionScheduler m_oScheduler;

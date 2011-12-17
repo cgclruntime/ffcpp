@@ -19,6 +19,10 @@ extern ff::details::FFFunctionThreadPool g_oThreadPool;
 		__pLog->logModule("parallel"); \
 		__pLog->logModule("waits"); \
 		__pLog->logModule("taskq"); \
+		__pLog->logModule("scheduler"); \
+		__pLog->logModule("msg"); \
+		__pLog->logModule("main"); \
+		__pLog->logModule("worker"); \
 		g_oThreadPool.initialize(pool_size);
 #else
 #define FF_INITIALIZE(pool_size) g_oThreadPool.initialize(pool_size);

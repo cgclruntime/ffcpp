@@ -76,7 +76,11 @@ void FFFunctionWorker::executeTask(ParallelBase *pFunction)
 	log_worker("FFFunctionWorker", "executeTask(), processing pfid: " + pFunction->toString());
 #endif
 	pFunction->run();
+	pFunction->setExeOver();
 	FFMsgPtr pMsg(new FFMsg(FFMsg::mt_pf_finish, pFunction->identifier()));
+#ifdef _DEBUG
+	log_msg("FFFunctionWorker", "executeTask(), send msg mt_pf_finish: " + utl::str(pMsg->getPFID()));
+#endif
 	m_oPort.sendMsg(pMsg->getType(), pMsg);
 }
 

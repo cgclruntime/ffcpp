@@ -10,4 +10,6 @@ DEF_LOG_MODULE(worker)
 DEF_LOG_MODULE(parallel)
 DEF_LOG_MODULE(taskq)
 DEF_LOG_MODULE(waits)
+DEF_LOG_MODULE(msg)
+DEF_LOG_MODULE(main)
 #endif

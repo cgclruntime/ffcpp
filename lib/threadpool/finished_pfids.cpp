@@ -4,7 +4,7 @@
 #include "threadpool/eager_scheduler.h"
 #include "utils/atomic.h"
 #include "common/log.h"
-
+#include "utils/os_utils.h"
 
 namespace ff{
 namespace details{
@@ -30,9 +30,7 @@ FinishedPFIDs::~FinishedPFIDs()
 void FinishedPFIDs::pushBack(pfid_t pfid)
 {
 	unique_lock _t(m_oMutex);
-#ifdef _DEBUG
 	log_finishes("FinishedPFIDs", "pushBack(), pfid: " + utl::str(pfid) );
-#endif
 	if(m_iTop-m_iBottom+2>=m_oPFIDs.getCapacity())
 		m_oPFIDs.resizeAndCopy(64,m_iTop, m_iBottom);
 	m_oPFIDs[m_iTop].id = pfid;
@@ -55,8 +53,8 @@ bool FinishedPFIDs::has(pfid_t pfid) const
 
 bool FinishedPFIDs::nonBlockedhas(pfid_t pfid) const
 {
-#ifdef _DEBUG
 	log_finishes("FinishedPFIDs", "nonBlockedhas(), bottom:"+ utl::str(m_iBottom)+" top:"+utl::str(m_iTop));
+#ifdef _DEBUG
 	for(size_t i = m_iBottom; i < m_iTop; ++i)
 	{
 		log_finishes("FinishedPFIDs", "nonBlockedhas(), "+utl::str(i)+" : "+utl::str(m_oPFIDs[i].id));
@@ -107,15 +105,14 @@ bool FinishedPFIDs::wait(pfid_t pfid)
 
 	while(!flag)
 	{
-#ifdef _DEBUG
-		log_finishes("FinishedPFIDs", "wait(), waiting: " + utl::str(pfid));
-#endif
 		utl::Atomic<utl::uint16_t>::inc(&m_iWaitNumber);
-		if(m_iWaitNumber > iPoolSize)	//dead-lock happenes!!
-		{
+		int temp = m_iWaitNumber;
 #ifdef _DEBUG
-			log_finishes("FinishedPFIDs", "wait(), dead-lock happens! pool size:" + utl::str(iPoolSize) + ", waits number:"+utl::str(m_iWaitNumber));
+		log_finishes("FinishedPFIDs", "wait(), waiting: " + utl::str(pfid) + " waiting num:" + utl::str(temp));
 #endif
+		if(temp >= iPoolSize)	//dead-lock happenes!!
+		{
+			log_finishes("FinishedPFIDs", "wait(), dead-lock happens! pool size:" + utl::str(iPoolSize) + ", waits number:"+utl::str(m_iWaitNumber));
 			if(E.getState() == EagerScheduler::state_null)
 				E.setDeadLock();
 			else if(E.getState() == EagerScheduler::state_dead_lock)
@@ -125,18 +122,38 @@ bool FinishedPFIDs::wait(pfid_t pfid)
 			}
 			utl::Atomic<utl::uint16_t>::dec(&m_iWaitNumber);
 			notify();//wait again.
+			//utl::Utils::releaseCPU();
+			//utl::sleep<5000>();
 			return false;
 		}
 		else {
+#ifdef _DEBUG
+			log_finishes("FinishedPFIDs", "wait(), waiting conditional variable...");
+#endif
+
 			m_oConds.wait(_t);
 			utl::Atomic<utl::uint16_t>::dec(&m_iWaitNumber);
 			flag = nonBlockedhas(pfid);
 			if(E.getState() != EagerScheduler::state_null)
 				return flag;
 		}//end else
+
 	}//end while
+	return false; //no use here
 }
 
+bool FinishedPFIDs::noBlockWait(pfid_t pfid)
+{
+	shared_lock _t(m_oMutex);
+	bool flag = nonBlockedhas(pfid);
+#ifdef _DEBUG
+	log_finishes("FinishedPFIDs",
+			"noBlockWait(), checking: " + utl::str(pfid) + " ret:" + utl::str(flag));
+#endif
+	if (flag)
+		return true;
+	return false;
+}
 
 };//end namespace details;
 };//end namespace ff;

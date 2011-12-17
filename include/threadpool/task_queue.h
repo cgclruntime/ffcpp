@@ -21,7 +21,9 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/thread/mutex.hpp>
-
+#include <boost/thread/shared_mutex.hpp>
+#include <boost/thread/locks.hpp>
+#include <list>
 #include "utils/atomic_stamped_reference.h"
 #include "threadpool/circle_array.h"
 #include "common/log.h"
@@ -29,7 +31,76 @@
 
 namespace ff{
 namespace details{
+#if 1
+template<typename Task_t>
+class TaskQueue: public boost::noncopyable
+{
+public:
+	TaskQueue(utl::uint32_t iCapacity)
+	{};
+	inline size_t size() const
+	{
+		//shared_lock _t(m_oMutex);
+		lock_guard _t(m_oMutex);
+		return m_oTaskQ.size();
+	}
+	void pushTop(Task_t *pTask)
+	{
+//		unique_lock _t(m_oMutex);
+		lock_guard _t(m_oMutex);
+		m_oTaskQ.push_back(pTask);
+	}
+	Task_t * popBottom()
+	{
+		//unique_lock _t(m_oMutex);
+		lock_guard _t(m_oMutex);
+		if(m_oTaskQ.empty() )
+			return NULL;
+		Task_t * temp = m_oTaskQ.front();
+		m_oTaskQ.pop_front();
+		return temp;
+	}
 
+	Task_t * getBottom()
+	{
+//		unique_lock _t(m_oMutex);
+		lock_guard _t(m_oMutex);
+		if(m_oTaskQ.empty())
+			return NULL;
+		Task_t * temp = m_oTaskQ.front();
+		m_oTaskQ.pop_front();
+		return temp;
+	}
+//! Set the specified task invalid
+	void invalidTask(Task_t *pTask)
+	{
+		//unique_lock _t(m_oMutex);
+		lock_guard _t(m_oMutex);
+
+		REDO:
+		for(typename std::list<Task_t *>::iterator it = m_oTaskQ.begin(); it!= m_oTaskQ.end(); ++it)
+		{
+			if(*it == pTask)
+			{
+				m_oTaskQ.erase(it);
+				goto REDO;
+			}
+		}
+
+	}
+protected:
+	typedef boost::lock_guard<boost::mutex>			lock_guard;
+	typedef boost::mutex				mutex;
+	typedef boost::shared_mutex			shared_mutex;
+	typedef boost::shared_lock<shared_mutex>	shared_lock;
+	typedef boost::unique_lock<shared_mutex>	unique_lock;
+
+	std::list<Task_t *> 		m_oTaskQ;
+	mutable mutex 			m_oMutex;
+};
+#endif
+
+#if 0
 template <typename Task_t>
 class TaskQueue : public boost::noncopyable
 {
@@ -60,11 +131,9 @@ public:
 				utl::Atomic<utl::mem>::sync();
 				m_oArray.resizeAndCopy(64, m_oTop.get(), m_oBottom.get());
 				m_oInvalidFlags.resizeAndCopy(64, m_oTop.get(), m_oBottom.get());
-#ifdef _DEBUG
 				log_taskq("TaskQueue",
 						"pushTop(), resize, top:" + utl::str(m_oTop.get())+
 						" bottom:"+utl::str(m_oBottom.get()));
-#endif
 			}
 			m_oMutex.unlock();
 		}
@@ -77,9 +146,7 @@ public:
 			m_oTop.set(oldTop+1, oldStamp+1);
 			m_oArray[oldTop] = pTask;
 			m_oInvalidFlags[oldTop] = false;
-#ifdef _DEBUG
 			log_taskq("TaskQueue", "pushTop(), mutex push location:"+ utl::str(oldTop));
-#endif
 			m_oMutex.unlock();
 			return ;
 		}
@@ -101,9 +168,7 @@ public:
 			newTop = oldTop +1, newStamp = oldStamp+1;
 			flag = m_oTop.compareAndSet(oldTop, newTop, oldStamp, newStamp);
 		}
-#ifdef _DEBUG
 		log_taskq("TaskQueue", "pushTop(), shared push location:"+utl::str(oldTop));
-#endif
 		m_oArray[oldTop] = pTask;
 		m_oInvalidFlags[oldTop] = false;
 	};
@@ -132,11 +197,9 @@ public:
 					flag_get = true;
 			}
 			m_oMutex.unlock();
-#ifdef _DEBUG
 			log_taskq("TaskQueue",
 					"popBottom(), mutex pop location:"+utl::str(oldBottom)+
 					" new bottom:"+utl::str(m_oBottom.get()));
-#endif
 			return m_oArray[oldBottom];
 		}
 
@@ -151,11 +214,9 @@ public:
 			flag = flag && (!m_oInvalidFlags[oldBottom]);
 		}
 		utl::Atomic<utl::mem>::sync();
-#ifdef _DEBUG
 		log_taskq("TaskQueue",
 				"popBottom(), shared pop location:"+utl::str(oldBottom)+
 				" new bottom:"+utl::str(m_oBottom.get()));
-#endif
 		return m_oArray[oldBottom];
 	}
 
@@ -188,9 +249,7 @@ public:
 			if(m_oArray[i] == pTask)
 			{
 				m_oInvalidFlags[i] = true;
-#ifdef _DEBUG
 				log_taskq("TaskQueue", "invalidTask(), invalid pos:"+utl::str(i));
-#endif
 			}
 		}
 	}
@@ -219,6 +278,7 @@ protected:
 	ff::details::CircleArray<bool>					m_oInvalidFlags;//If the flag is true, then the corresponding Task_t * is invalid;
 	boost::mutex				m_oMutex;
 };//end class TaskQueue
+#endif
 
 };//end namespace details;
 };//end namespace ff;

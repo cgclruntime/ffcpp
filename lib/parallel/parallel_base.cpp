@@ -4,7 +4,7 @@
 #include "threadpool/function_thread_pool.h"
 #include "threadpool/eager_scheduler.h"
 #include "common/log.h"
-
+#include <boost/thread/locks.hpp>
 #ifdef _DEBUG
 #include <sstream>
 #endif
@@ -19,11 +19,16 @@ volatile utl::uint32_t ParallelBase::s_iIdentifier = 1;
 
 ParallelBase::ParallelBase()
 : m_iIdentifier(s_iIdentifier){
-	setConstructed();
 	while(!utl::Atomic<utl::uint32_t>::bool_cas(&s_iIdentifier,m_iIdentifier + 1, m_iIdentifier))
 	{
 		m_iIdentifier = s_iIdentifier;
 	}
+
+	m_iState.state = 0;
+	setConstructed();
+#ifdef _DEBUG
+	log_parallel("ParallelBase", "ParallelBase(), constructor! " + toString());
+#endif
 }
 
 ParallelBase::~ParallelBase() {
@@ -47,26 +52,65 @@ void ParallelBase::waitFinish()
 	EagerScheduler &ES = S.eager();
 
 	bool flag_finished = false;
+	int i_loop = 0;
 	while(!flag_finished){
-		if(!FP.wait(m_iIdentifier)){
+		/*if(!FP.wait(m_iIdentifier)){
 			switch(ES.getState()){
 			case EagerScheduler::state_null:
 				break;
 			case EagerScheduler::state_dead_lock:
 				if(isCalledParen() && !isRunning() && !isExeOver())
 					ES.pushUnrunnedPF(this);
+				else
+				{
+
+				}
 				break;
 			case EagerScheduler::state_scheduled:
 				ES.setStateNull();
 				ES.executeAllPF();
 				break;
 			}//end switch
+
+			FFFunctionWorker * pWorker = g_oThreadPool.getNthWorker(i_loop);
+			ParallelBase *pFunc = pWorker->m_oTasks.getBottom();
+			if(pFunc)
+			{
+#ifdef _DEBUG
+				log_parallel("ParallelBase", "waitFinish(), steal func:" + pFunc->toString());
+#endif
+				g_oThreadPool.invalidTask(pFunc);
+				ES.executeOnePF(pFunc);
+			}
+			i_loop ++;
 		}//end if
 		else{
 			WD.eraseAllInfoOfPF(m_iIdentifier);
 			g_oThreadPool.decrementParaFuncNum();
 			flag_finished = true;
 		}//end else
+		*/
+		if(!FP.noBlockWait(m_iIdentifier))
+		{
+			FFFunctionWorker * pWorker = g_oThreadPool.getNthWorker(i_loop);
+			ParallelBase *pFunc = NULL;
+			pFunc = pWorker->m_oTasks.getBottom();
+			if(pFunc)
+			{
+#ifdef _DEBUG
+				log_parallel("ParallelBase", utl::str(m_iIdentifier)+" waitFinish(), steal func:" + pFunc->toString());
+#endif
+				//g_oThreadPool.invalidTask(pFunc);
+				ES.executeOnePF(pFunc);
+			}
+			i_loop ++;
+		}
+		else
+		{
+			WD.eraseAllInfoOfPF(m_iIdentifier);
+			g_oThreadPool.decrementParaFuncNum();
+			flag_finished = true;
+		}
 	}//end while
 }
 

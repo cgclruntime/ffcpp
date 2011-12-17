@@ -101,5 +101,11 @@ FFFunctionWorker * FFFunctionThreadPool::getMostBusyWorker()
 	return (m_pWorkers + suffix);
 };
 
+FFFunctionWorker * FFFunctionThreadPool::getNthWorker(int index)
+{
+	int suffix = index%m_iPoolSize;
+	return m_pWorkers + suffix;
+}
+
 };//end namespace detail;
 };//end namespace ff;

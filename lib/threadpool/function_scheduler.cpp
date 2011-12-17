@@ -43,21 +43,29 @@ void FFFunctionScheduler::run() {
 			break;
 		}//end switch
 	}//end while
+#ifdef _DEBUG
 	log_scheduler("FFFunctionScheduler", "run(), quite!");
+#endif
 }
 
 void FFFunctionScheduler::handlePFFinishMsg(const FFMsg & msg)
 {
+#ifdef _DEBUG
 	log_scheduler("FFFunctionScheduler", "handlePFFinishMsg(), id:" + utl::str(msg.getPFID()));
-
+#endif
 	//The atomic operation must be ensured!
 	acquireUniqueAtomic();
+#ifdef _DEBUG
 	log_scheduler("FFFunctionScheduler", "handlePFFinishMsg(), Enter atomic. id:" + utl::str(msg.getPFID()));
+#endif
 	m_oFinishes.pushBack(msg.getPFID());
 	m_oFinishes.notify();
 	releaseUniqueAtomic();
 
 	m_oWaits.handleFinishedPF(msg.getPFID());
+#ifdef _DEBUG
+	log_scheduler("FFFunctionScheduler", "handlePFFinishMsg(), handle over!");
+#endif
 }
 
 };//end namespace detail

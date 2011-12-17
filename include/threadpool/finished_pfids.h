@@ -33,6 +33,9 @@ public:
 	//! If id is in, return true. If dead lock happenes, return false. Otherwise, block!
 	bool				wait(pfid_t id);
 
+	//! If id is in, return true, else return false.
+	bool				noBlockWait(pfid_t id);
+
 	//! Notify the blocked thread to recheck.
 	inline void				notify(){
 		m_oConds.notify_all();
