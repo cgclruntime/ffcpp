@@ -3,6 +3,8 @@
 #ifndef FFCPP_THREAD_POOL_FINISHED_PFIDS_H_
 #define FFCPP_THREAD_POOL_FINISHED_PFIDS_H_
 
+#include <vector>
+#include "common/decl_types.h"
 #include "utils/types.h"
 #include <boost/thread/shared_mutex.hpp>
 #include <boost/thread/locks.hpp>
@@ -13,7 +15,6 @@ namespace ff
 {
 namespace details{
 
-typedef utl::uint32_t pfid_t;
 class FFFunctionThreadPool;
 
 class FinishedPFIDs{
@@ -29,7 +30,8 @@ public:
 
 	//! Delete the id.
 	void				erase(pfid_t id);
-
+	void				erase(std::vector<p_elem_t> & pfids);
+	
 	//! If id is in, return true. If dead lock happenes, return false. Otherwise, block!
 	bool				wait(pfid_t id);
 

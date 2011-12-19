@@ -7,7 +7,7 @@
 #include "threadpool/function_thread_pool.h"
 #include "parallel/wait_conds_expr.h"
 #include "common/log.h"
-
+#include "parallel/parallel_vector.h"
 
 extern ff::details::FFFunctionThreadPool g_oThreadPool;
 

@@ -112,6 +112,10 @@ void ParallelBase::waitFinish()
 			flag_finished = true;
 		}
 	}//end while
+	
+	//TO erase the finished_pfids.
+	if(!isInCollection())
+	  g_oThreadPool.scheduler().finishes().erase(m_iIdentifier);
 }
 
 

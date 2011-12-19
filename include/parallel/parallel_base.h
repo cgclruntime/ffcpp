@@ -8,13 +8,15 @@ This class is for separating the template arguments from most members.
 #include <boost/noncopyable.hpp>
 #include "utils/types.h"
 #include "parallel/wait_conds.h"
+#include "common/decl_types.h"
+
 #ifdef _DEBUG
 #include <string>
 #endif
 
 namespace ff {
 namespace details {
-typedef utl::uint32_t pfid_t;
+    
 class ParallelBase: public boost::noncopyable {
 protected:
 	//! Constructor
@@ -54,14 +56,16 @@ public:
 	inline void					setExeOver()	{m_iState.D.s1 = state_exe_over;};
 	inline void					setWaitSemaphore(){m_iState.D.s2 = state_wait_semaphore;};
 	inline void					setDeconstructed(){m_iState.D.s3 = state_deconstructing;};
-
+	inline void					setInCollection() {m_iState.D.s0 = state_in_collection; }
+	
+	
 	inline bool					isConstructed() const {return m_iState.D.s3 == state_constructed;};
 	inline bool					isCalledParen() const {return m_iState.D.s3 == state_called_paren_operator;};
 	inline bool					isRunning()	const {return m_iState.D.s1 == state_running;};
 	inline bool					isExeOver() const {return m_iState.D.s1 == state_exe_over;};
 	inline bool					isWaitSemaphore() const	{return m_iState.D.s2 == state_wait_semaphore;};
 	inline bool					isDeconstructed() const	{return m_iState.D.s3 == state_deconstructing;};
-
+	inline bool					isInCollection() const{ return m_iState.D.s0 == state_in_collection; };
 protected:
 	friend class FFFunctionScheduler;
 	friend class FFFunctionWorker;
@@ -76,11 +80,15 @@ protected:
 		state_exe_over = 0x2,
 		state_wait_semaphore = 0x3,
 	};
-
+	enum {
+		state_in_collection = 0x1,
+	};
+	
 	union State{
 		utl::uint8_t 	state;	// no use.
 		struct {
-			utl::uint8_t s1 : 4; //can be state_running, state_exe_over
+			utl::uint8_t s0 : 1; //can be state_in_collection
+			utl::uint8_t s1 : 3; //can be state_running, state_exe_over
 			utl::uint8_t s2 : 2; //can be state_wait_semaphoer
 			utl::uint8_t s3 : 2; //can be state_constructed, state_deconstructing and state_called_paren_operator
 		}D;
@@ -94,7 +102,6 @@ protected:
 
 
 };//end class ParallelBase;
-
 
 }//end namespace details;
 }//end namespace ff;

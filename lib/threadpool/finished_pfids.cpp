@@ -1,4 +1,5 @@
 #include "threadpool/finished_pfids.h"
+#include "parallel/parallel_base.h"
 #include "threadpool/function_thread_pool.h"
 #include "threadpool/function_scheduler.h"
 #include "threadpool/eager_scheduler.h"
@@ -8,6 +9,8 @@
 
 namespace ff{
 namespace details{
+
+    
 
 FinishedPFIDs::FinishedPFIDs(FFFunctionThreadPool *pPool)
 : m_oMutex()
@@ -30,7 +33,9 @@ FinishedPFIDs::~FinishedPFIDs()
 void FinishedPFIDs::pushBack(pfid_t pfid)
 {
 	unique_lock _t(m_oMutex);
+#ifdef _DEBUG
 	log_finishes("FinishedPFIDs", "pushBack(), pfid: " + utl::str(pfid) );
+#endif
 	if(m_iTop-m_iBottom+2>=m_oPFIDs.getCapacity())
 		m_oPFIDs.resizeAndCopy(64,m_iTop, m_iBottom);
 	m_oPFIDs[m_iTop].id = pfid;
@@ -53,8 +58,9 @@ bool FinishedPFIDs::has(pfid_t pfid) const
 
 bool FinishedPFIDs::nonBlockedhas(pfid_t pfid) const
 {
-	log_finishes("FinishedPFIDs", "nonBlockedhas(), bottom:"+ utl::str(m_iBottom)+" top:"+utl::str(m_iTop));
 #ifdef _DEBUG
+	log_finishes("FinishedPFIDs", "nonBlockedhas(), bottom:"+ utl::str(m_iBottom)+" top:"+utl::str(m_iTop));
+
 	for(size_t i = m_iBottom; i < m_iTop; ++i)
 	{
 		log_finishes("FinishedPFIDs", "nonBlockedhas(), "+utl::str(i)+" : "+utl::str(m_oPFIDs[i].id));
@@ -87,6 +93,24 @@ void FinishedPFIDs::erase(pfid_t pfid)
 		}
 	}
 }
+void FinishedPFIDs::erase(std::vector<p_elem_t> & pfids)
+{
+  unique_lock _t(m_oMutex);
+
+    for (size_t j = 0; j < pfids.size(); ++j)
+    {
+        for (size_t i = m_iBottom; i < m_iTop; ++i)
+        {	    
+            if (m_oPFIDs[i].id == pfids[j].pfid)
+            {
+                m_oPFIDs[i].bErased = true;
+                break;
+            }
+        }
+    }
+    for(size_t i = m_iBottom; i < m_iTop && m_oPFIDs[i].bErased; ++i) m_iBottom = i;
+	m_iBottom ++;
+}
 
 
 
@@ -112,7 +136,9 @@ bool FinishedPFIDs::wait(pfid_t pfid)
 #endif
 		if(temp >= iPoolSize)	//dead-lock happenes!!
 		{
+#ifdef _DEBUG
 			log_finishes("FinishedPFIDs", "wait(), dead-lock happens! pool size:" + utl::str(iPoolSize) + ", waits number:"+utl::str(m_iWaitNumber));
+#endif
 			if(E.getState() == EagerScheduler::state_null)
 				E.setDeadLock();
 			else if(E.getState() == EagerScheduler::state_dead_lock)
@@ -130,7 +156,6 @@ bool FinishedPFIDs::wait(pfid_t pfid)
 #ifdef _DEBUG
 			log_finishes("FinishedPFIDs", "wait(), waiting conditional variable...");
 #endif
-
 			m_oConds.wait(_t);
 			utl::Atomic<utl::uint16_t>::dec(&m_iWaitNumber);
 			flag = nonBlockedhas(pfid);
